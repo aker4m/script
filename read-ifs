@@ -1,0 +1,22 @@
+#!/bin/bash
+
+FILE=/etc/passwd
+
+read -p "Enter a username > " user_name
+
+file_info=$(grep "^$user_name:" $FILE)
+
+if [ -n "$file_info" ]; then
+	IFS=":" read user pw uid gid name home shell <<< "$file_info"
+	cat <<- _EOF_
+		User = 		$user
+		UID = 		$uid
+		GID = 		$gid
+		Full Name = 	$name
+		Home Dir. = 	$home
+		Shell = 	$shell
+		_EOF_
+else
+	echo "No such user '$user_name'" >&2
+	exit 1
+fi
